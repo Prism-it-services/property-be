@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
+    "properties": {
+        "price": {
+            "title": "price",
+            "type": "string"
+        },
+        "beds": {
+            "title": "beds",
+            "type": "number"
+        }
+    },
+    "required": [
+        "price",
+        "beds"
+    ],
+    "type": "object"
+}

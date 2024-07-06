@@ -1,0 +1,65 @@
+service: ${self:custom.service}
+frameworkVersion: '3'
+plugins:
+  - serverless-esbuild
+  # - serverless-latest-layer-version
+  - serverless-offline
+  - serverless-prune-plugin
+
+package:
+  individually: true
+
+custom:
+  service: sls-template
+  prune:
+    automatic: true
+    number: 3
+  esbuild:
+    minify: true
+    packager: yarn
+    external:
+      - jsonpath
+
+  # eventBus: ${self:provider.stage}-bs
+  # eventBusArn: 
+  basename: ${self:provider.stage}-${self:service}
+  # authorizerARN: arn:aws:lambda:${aws:region}:${aws:accountId}:function:authorizer-${self:provider.stage}-authorizer
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  architecture: arm64
+  versionFunctions: false
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-2
+  # layers: arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${self:custom.layerEnv}-slsDependencies:latest
+  # iamRoleStatements:
+  #   - Effect: 'Allow'
+  #     Action:
+  #       - events:*
+  #     Resource:
+  #       - '*'
+  environment:
+    SERVICE_NAME: ${self:service}
+    # EVENTS_BUS: ${self:custom.eventBus}
+    LOG_LEVEL: info
+
+functions:
+  simpleGet: ${file(./config/functions/simpleGet.yml)}
+  simplePost: ${file(./config/functions/simplePost.yml)}
+
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:custom.basename}
+    ApiGatewayResponseResourceNotFound:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        ResponseType: BAD_REQUEST_BODY
+        'StatusCode': '422'
+        ResponseTemplates:
+          application/json: '{"message": "$context.error.message", "error": "$context.error.validationErrorString"}'
