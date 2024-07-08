@@ -10,7 +10,7 @@ package:
   individually: true
 
 custom:
-  service: sls-template
+  service: property-be
   prune:
     automatic: true
     number: 3
@@ -43,10 +43,14 @@ provider:
     SERVICE_NAME: ${self:service}
     # EVENTS_BUS: ${self:custom.eventBus}
     LOG_LEVEL: info
+    MONGO_CONNECTION_URI: ${ssm:/${self:provider.stage}-mongo-connection-string}
 
 functions:
-  simpleGet: ${file(./config/functions/simpleGet.yml)}
-  simplePost: ${file(./config/functions/simplePost.yml)}
+  addProperty: ${file(./config/functions/addProperty.yml)}
+  updateProperty: ${file(./config/functions/updateProperty.yml)}
+  deleteProperty: ${file(./config/functions/deleteProperty.yml)}
+  getAllProperties: ${file(./config/functions/getAllProperties.yml)}
+  getProperty: ${file(./config/functions/getProperty.yml)}
 
 resources:
   Resources:

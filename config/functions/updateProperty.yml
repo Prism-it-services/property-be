@@ -1,0 +1,14 @@
+handler: src/commands/updateProperty.handler
+events:
+  - http:
+      path: property/{id}
+      method: put
+      cors: true
+      # authorizer:
+      #   arn: ${self:custom.authorizerARN}
+      #   resultTtlInSeconds: 0
+      #   identitySource: method.request.header.Authorization
+      #   type: token
+      request:
+        schemas:
+          application/json: ${file(schemas/updateProperty.json)}

@@ -1,7 +1,7 @@
-handler: src/commands/simplePost.handler
+handler: src/commands/addProperty.handler
 events:
   - http:
-      path: simplePost
+      path: property
       method: post
       cors: true
       # authorizer:
@@ -11,4 +11,4 @@ events:
       #   type: token
       request:
         schemas:
-          application/json: ${file(schemas/simplePost.json)}
+          application/json: ${file(schemas/addProperty.json)}

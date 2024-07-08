@@ -39,7 +39,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "@prism-it-services/helper-utils": "^0.0.2",
+    "@prism-it-services/helper-utils": "^0.0.3",
     "jsonpath": "^1.1.1"
   },
   "husky": {

@@ -1,0 +1,11 @@
+handler: src/commands/getAllProperties.handler
+events:
+  - http:
+      path: property
+      method: get
+      cors: true
+      # authorizer:
+      #   arn: ${self:custom.authorizerARN}
+      #   resultTtlInSeconds: 0
+      #   identitySource: method.request.header.Authorization
+      #   type: token
