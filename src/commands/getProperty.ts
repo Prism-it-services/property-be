@@ -9,8 +9,25 @@ import { logger } from '@prism-it-services/helper-utils/dist/logger'
 import { mongoMiddleware } from '@prism-it-services/helper-utils/dist/middleware/mongoMiddleware'
 import { getPropertyById } from '../logic/getProperty'
 
+const hasArguments = (event: any): event is { arguments: { id: string } } => {
+  return (event as { arguments?: { id: string } }).arguments !== undefined;
+};
+
 const getProperty: Handler = async (event: GetByIdRequest): Promise<HttpGenericResponse> => {
-  const propertyId = (event.pathParameters || {}).id
+  const propertyId = (event.pathParameters?.id) || (hasArguments(event) ? event.arguments.id : undefined);
+
+  if (!propertyId) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        status: 'fail',
+        message: 'Property ID not provided',
+      }),
+    };
+  }
+
+
+
   const property = await getPropertyById(propertyId)
   if (property)
     return successResponse({

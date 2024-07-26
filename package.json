@@ -39,6 +39,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "@middy/core": "^5.4.5",
     "@prism-it-services/helper-utils": "^0.0.3",
     "jsonpath": "^1.1.1"
   },
